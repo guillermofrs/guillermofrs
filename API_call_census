@@ -1,0 +1,27 @@
+# API call I wrote to call in census data
+
+
+
+years=[ 2007]
+my_columns = ['NAME', 'Population','population w grad','State', "years"]
+variables = 'NAME,B01001_001E,B06009_006E'
+geography = "metropolitan%20statistical%20area/micropolitan%20statistical%20area"
+
+
+import requests
+import numpy as np
+import pandas as pd
+import json
+
+final_dataframe = pd.DataFrame()
+for i in years:
+    api_url = f"https://api.census.gov/data/{i}/acs/acs1?get={variables}&for={geography}:*"
+    data = requests.get(api_url).json()
+    for item in data:
+        item.append(i)
+    final_dataframe = final_dataframe.append(pd.DataFrame(data, columns = my_columns
+                                                  ), 
+                                        ignore_index = True
+        )
+final_dataframe = final_dataframe[final_dataframe.NAME != "NAME"]
+   
