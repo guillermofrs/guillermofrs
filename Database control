@@ -1,0 +1,23 @@
+
+import pyodbc
+import pandas as pd 
+import numpy as np
+connection_string = (
+    r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};'
+    r'DBQ=Y:\Noncushman_be.accdb;;'
+)
+cnxn = pyodbc.connect(connection_string, autocommit=True)
+crsr = cnxn.cursor()
+
+
+query = "select * from Databasetable"
+dataf = pd.read_sql(query, cnxn)
+cnxn.close()
+
+data = dataf
+data = data.drop('ID' , axis = 1) 
+data = data.fillna(value=np.NaN)
+
+
+
+# prop data analysis after this.
